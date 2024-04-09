@@ -1,19 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import "../public/manifest.json";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
+import { cinemasApi } from "./features/api/cinemasSlice";
+import { ApiProvider } from "@reduxjs/toolkit/query/react";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <ChakraProvider>
+    <React.StrictMode>
+      <ApiProvider api={cinemasApi}>
+        <RouterProvider router={router}></RouterProvider>
+      </ApiProvider>
+    </React.StrictMode>
+  </ChakraProvider>,
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
