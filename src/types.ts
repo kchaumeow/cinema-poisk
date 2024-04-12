@@ -1,4 +1,4 @@
-export interface CinemaSmall {
+export interface Cinema {
   name: string;
   id: number;
   rating: {
@@ -16,7 +16,7 @@ export interface CinemaSmall {
   };
 }
 
-export interface Cinema extends CinemaSmall {
+export interface CinemaDetails extends Cinema {
   description: string | null;
   year: number;
   genres: {
@@ -24,6 +24,7 @@ export interface Cinema extends CinemaSmall {
   }[];
   persons: Person[];
   networks: null | [];
+  similarMovies: SimilarMovie[];
 }
 
 export type Person = {
@@ -32,4 +33,21 @@ export type Person = {
   name: string;
   description: string;
   profession: string;
+};
+
+export type Field = {
+  name: string;
+  slug: string;
+};
+
+export type SimilarMovie = {
+  id: number;
+  name: string;
+  enName: string | null;
+  alternativeName: string | null;
+  type: string;
+  poster: {
+    url: string;
+    previewUrl: string;
+  };
 };

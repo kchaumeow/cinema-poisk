@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const webpack = require("webpack");
 
@@ -25,6 +26,36 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
+  performance: {
+    maxAssetSize: 500000, // in bytes, e.g., 500 KiB
+    maxEntrypointSize: 500000, // in bytes, e.g., 500 KiB
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+    splitChunks: {
+      chunks: "all",
+      minSize: 20000,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      automaticNameDelimiter: "~",
+      name: false,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          filename: "vendors.js",
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+          filename: "common.js",
+        },
+      },
+    },
+  },
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
@@ -41,8 +72,16 @@ module.exports = {
     }),
   ],
   devServer: {
-    static: [{ directory: path.resolve(__dirname, "dist") }],
     historyApiFallback: true,
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    client: {
+      overlay: {
+        warnings: false,
+        errors: true,
+      },
+    },
     compress: true,
     port: 7070,
     open: true,
