@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useGetCinemaByIdQuery } from "../features/api/cinemasSlice";
 import {
   Box,
   Flex,
@@ -14,19 +13,29 @@ import ActorsList from "../components/ActorsList";
 import CinemaSlider from "../components/CinemaSlider";
 import ReviewList from "../components/ReviewsList";
 import SeasonsList from "../components/SeasonsList";
+import { useLazyGetCinemaByIdQuery } from "../features/api/cinemasSlice";
+import { useEffect } from "react";
 
 const series = ["cartoon", "tv-series", "anime", "animated-series"];
 
 export default function Cinema() {
   const { id } = useParams();
-  const {
-    data: cinema,
-    isLoading,
-    isError,
-    isFetching,
-    isSuccess,
-    error: cinemaError,
-  } = useGetCinemaByIdQuery(id!);
+  const [
+    trigger,
+    {
+      data: cinema,
+      isLoading,
+      isError,
+      isFetching,
+      isSuccess,
+      error: cinemaError,
+    },
+    lastPromiseInfo,
+  ] = useLazyGetCinemaByIdQuery();
+  useEffect(() => {
+    const request = trigger(id!);
+    return () => request.abort();
+  }, []);
 
   if (isLoading || isFetching || cinemaError || !cinema)
     return (
@@ -66,7 +75,6 @@ export default function Cinema() {
               {cinema.name}
             </Text>
           )}
-
           <Text color="orange.500" fontWeight="700" fontSize="xl">
             KP: {cinema.rating.kp.toFixed(1)}
           </Text>
@@ -76,14 +84,17 @@ export default function Cinema() {
         </Stack>
         <Image src={cinema.poster.url} alt={cinema.name} h="800px" />
       </Flex>
+
       <Heading size="2xl" color="orange.500" pb={5}>
         Постеры
       </Heading>
       <Posters id={cinema.id.toString()} />
+
       <Heading size="2xl" color="orange.500" pb={5} pt={100}>
         Актеры
       </Heading>
       <ActorsList actors={cinema.persons} />
+
       <CinemaSlider cinemas={cinema.similarMovies} />
 
       <ReviewList id={id!} />

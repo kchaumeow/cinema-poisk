@@ -1,48 +1,54 @@
 import CinemaList from "../components/CinemaList";
-import {
-  useGetAllCinemasQuery,
-  useGetCountriesQuery,
-  useGetGenresQuery,
-} from "../features/api/cinemasSlice";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Heading, Spinner } from "@chakra-ui/react";
 import { usePagination } from "../hooks/usePagination";
 import { useFilters } from "../hooks/useFilters";
 import Pagination from "../components/Pagination";
 import Filters from "../components/Filters";
 import SearchModal from "../components/SearchModal";
+import { useGenresAndCountries } from "../hooks/useGenresAndCountries";
+import { useLazyGetAllCinemasQuery } from "../features/api/cinemasSlice";
+import { useEffect } from "react";
 
 export default function Home() {
   const { page, limit, setPage, setLimit } = usePagination("home");
   const { genre, country, year, ageRating, setAllFilters } = useFilters();
-  const {
-    data: cinemas,
+  const [
+    trigger,
+    {
+      data: cinemas,
+      isLoading,
+      isError,
+      isFetching,
+      isSuccess,
+      error: cinemaError,
+    },
+    lastPromiseInfo,
+  ] = useLazyGetAllCinemasQuery();
+  console.log({
+    cinemas,
     isLoading,
     isError,
     isFetching,
     isSuccess,
-    error,
-  } = useGetAllCinemasQuery({
-    page,
-    selectFields: ["id", "name", "rating", "poster"],
-    limit,
-    filters: {
-      genre,
-      country,
-      year,
-      ageRating,
-    },
+    error: cinemaError,
   });
-  const {
-    data: genres,
-    isSuccess: isSuccessGenres,
-    isLoading: isLoadingGenres,
-  } = useGetGenresQuery("");
-  const {
-    data: countries,
-    isSuccess: isSuccessCountries,
-    isLoading: isLoadingCountry,
-  } = useGetCountriesQuery("");
-  if (isLoading || isFetching || isLoadingGenres || isLoadingCountry)
+  useEffect(() => {
+    const request = trigger({
+      page,
+      selectFields: ["id", "name", "rating", "poster"],
+      limit,
+      filters: {
+        genre,
+        country,
+        year,
+        ageRating,
+      },
+    });
+    console.log(request);
+    return () => request.abort();
+  }, []);
+  const { resultGenres, resultCountries } = useGenresAndCountries();
+  if (resultGenres.isLoading || resultCountries.isLoading || !cinemas)
     return (
       <Spinner
         thickness="10px"
@@ -56,15 +62,15 @@ export default function Home() {
     );
   return (
     <>
-      {isError && JSON.stringify(error)}
+      {isError && <Heading color="red.500">(cinemaError)</Heading>}
       {isSuccess && (
         <Box display="flex" alignItems="center" flexDirection="column" gap={10}>
           <SearchModal />
-          {isSuccessGenres && isSuccessCountries && (
+          {resultGenres.isSuccess && resultCountries.isSuccess && (
             <Filters
               setAllFilters={setAllFilters}
-              genres={genres}
-              countries={countries}
+              genres={resultGenres.data}
+              countries={resultCountries.data}
               genre={genre}
               country={country}
               year={year}

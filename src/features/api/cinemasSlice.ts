@@ -155,12 +155,12 @@ export const cinemasApi = createApi({
 });
 
 export const {
-  useGetAllCinemasQuery,
-  useGetCinemaByIdQuery,
-  useGetCinemaPostersByIdQuery,
-  useGetGenresQuery,
-  useGetCountriesQuery,
-  useGetReviewsQuery,
-  useGetSeasonsQuery,
-  useGetCinemaByNameQuery,
+  useLazyGetAllCinemasQuery,
+  useLazyGetCinemaByIdQuery,
+  useLazyGetCinemaPostersByIdQuery,
+  useLazyGetGenresQuery,
+  useLazyGetCountriesQuery,
+  useLazyGetReviewsQuery,
+  useLazyGetSeasonsQuery,
+  useLazyGetCinemaByNameQuery,
 } = cinemasApi;

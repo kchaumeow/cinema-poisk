@@ -1,20 +1,30 @@
 import { Box, Heading, Spinner, Stack } from "@chakra-ui/react";
 import ReviewCard from "./ReviewCard";
 import { usePagination } from "../hooks/usePagination";
-import { useGetReviewsQuery } from "../features/api/cinemasSlice";
 import Pagination from "./Pagination";
+import { useLazyGetReviewsQuery } from "../features/api/cinemasSlice";
+import { useEffect } from "react";
 
 export default function ReviewList({ id }: { id: string }) {
   const { page, limit, setPage, setLimit } = usePagination("reviews");
-  const {
-    data: reviews,
-    isLoading: reviewsLoading,
-    isError: reviewsError,
-    isFetching: reviewsFetching,
-    isSuccess: reviewsSuccess,
-    error,
-  } = useGetReviewsQuery({ movieId: id, page, limit });
-  if (reviewsLoading)
+  const [
+    trigger,
+    {
+      data: reviews,
+      isLoading: reviewsLoading,
+      isError: reviewsError,
+      isFetching: reviewsFetching,
+      isSuccess: reviewsSuccess,
+      error,
+    },
+    lastPromiseInfo,
+  ] = useLazyGetReviewsQuery();
+  useEffect(() => {
+    const request = trigger({ movieId: id, page, limit });
+    return () => request.abort();
+  }, []);
+
+  if (reviewsLoading || reviewsFetching)
     return (
       <Spinner
         thickness="10px"

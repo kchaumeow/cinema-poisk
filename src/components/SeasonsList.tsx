@@ -1,17 +1,27 @@
 import { Heading, Spinner } from "@chakra-ui/react";
-import { useGetSeasonsQuery } from "../features/api/cinemasSlice";
+import { useLazyGetSeasonsQuery } from "../features/api/cinemasSlice";
 import Seasons from "./Seasons";
+import { useEffect } from "react";
 
 export default function SeasonsList({ movieId }: { movieId: string }) {
-  const {
-    data: reviews,
-    isLoading,
-    isError,
-    isFetching,
-    isSuccess,
-  } = useGetSeasonsQuery({ movieId: movieId });
+  const [
+    trigger,
+    {
+      data: seasons,
+      isLoading,
+      isError,
+      isFetching,
+      isSuccess,
+      error: cinemaError,
+    },
+    lastPromiseInfo,
+  ] = useLazyGetSeasonsQuery();
+  useEffect(() => {
+    const request = trigger({ movieId: movieId });
+    return () => request.abort();
+  }, []);
 
-  if (isLoading || !reviews)
+  if (isLoading || !seasons)
     return (
       <Spinner
         thickness="10px"
@@ -22,12 +32,12 @@ export default function SeasonsList({ movieId }: { movieId: string }) {
         h={100}
       />
     );
-  if (!reviews.docs.length)
+  if (!seasons.docs.length)
     return (
       <Heading color="orange.500" mt={200}>
         По вашему запросу ничего не найдено
       </Heading>
     );
 
-  return <Seasons list={reviews.docs} />;
+  return <Seasons list={seasons.docs} />;
 }

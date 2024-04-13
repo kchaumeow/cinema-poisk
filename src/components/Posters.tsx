@@ -1,7 +1,8 @@
-import { useGetCinemaPostersByIdQuery } from "../features/api/cinemasSlice";
+import { useLazyGetCinemaPostersByIdQuery } from "../features/api/cinemasSlice";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import { Heading, Image, Spinner } from "@chakra-ui/react";
 import "@splidejs/react-splide/css";
+import { useEffect } from "react";
 
 type CinemaPoster = {
   movieId: number;
@@ -15,16 +16,24 @@ type CinemaPoster = {
   createdAt: string;
 };
 export default function Posters({ id }: { id: string }) {
-  const {
-    data: posters,
-    isLoading,
-    isError,
-    isFetching,
-    isSuccess,
-    error,
-  } = useGetCinemaPostersByIdQuery(id);
+  const [
+    trigger,
+    {
+      data: posters,
+      isLoading,
+      isError,
+      isFetching,
+      isSuccess,
+      error: cinemaError,
+    },
+    lastPromiseInfo,
+  ] = useLazyGetCinemaPostersByIdQuery();
+  useEffect(() => {
+    const request = trigger(id);
+    return () => request.abort();
+  }, []);
 
-  if (isLoading || isFetching)
+  if (isLoading || isFetching || !posters)
     return (
       <Spinner
         thickness="10px"
