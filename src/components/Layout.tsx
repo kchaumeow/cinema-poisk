@@ -14,7 +14,7 @@ export default function Layout() {
           variant="solid"
           size="lg"
         >
-          <ArrowBackIcon /> Back
+          <ArrowBackIcon />
         </Button>
         <Link to={"/"}>
           <Text

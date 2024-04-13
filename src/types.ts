@@ -17,6 +17,7 @@ export interface Cinema {
 }
 
 export interface CinemaDetails extends Cinema {
+  type: string;
   description: string | null;
   year: number;
   genres: {
@@ -51,3 +52,39 @@ export type SimilarMovie = {
     previewUrl: string;
   };
 };
+
+export type Review = {
+  id: number;
+  movieId: number;
+  title: string;
+  type: string;
+  review: string;
+  date: string;
+  author: string;
+  authorId: string;
+  userRating: number;
+  updatedAt: string;
+  createdAt: string;
+};
+
+export type Season = {
+  movieId: number;
+  number: number;
+  airDate: string;
+  createdAt: string;
+  enName: string;
+  episodes: Episode[];
+};
+
+export type Episode = {
+  number: number;
+  name: string;
+  enName: string;
+  airDate: string;
+  description: string | null;
+};
+
+export const colors: Map<string, string> = new Map();
+colors.set("Негативный", "red");
+colors.set("Нейтральный", "yellow");
+colors.set("Позитивный", "green");

@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Select, Text } from "@chakra-ui/react";
+import { Button, Flex, Select, Text } from "@chakra-ui/react";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { UsePaginationResult } from "../hooks/usePagination";
 
@@ -13,7 +13,7 @@ export default function Pagination({
 }: PaginationProps) {
   const buttons = [page - 1, page, page + 1];
   return (
-    <ButtonGroup alignItems="center">
+    <Flex alignItems="center" gap={5}>
       <Button
         colorScheme="orange"
         variant="solid"
@@ -44,10 +44,11 @@ export default function Pagination({
       >
         <ArrowForwardIcon />
       </Button>
-      <Text color="orange.500" w={60}>
+      <Text color="orange.500" w="100px">
         из {maxPage}
       </Text>
       <Select
+        w="100px"
         defaultValue={limit}
         onChange={(e) => setLimit(e.target.value)}
         colorScheme="orange"
@@ -58,6 +59,6 @@ export default function Pagination({
         <option value="10">10</option>
         <option value="15">15</option>
       </Select>
-    </ButtonGroup>
+    </Flex>
   );
 }

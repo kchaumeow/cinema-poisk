@@ -1,5 +1,45 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CinemaDetails, Field } from "../../types";
+import { Cinema, CinemaDetails, Field, Review, Season } from "../../types";
+
+type Pagination = {
+  pages: number;
+  total: number;
+  limit: number;
+  page: number;
+};
+type ReviewResponse = {
+  docs: Review[];
+} & Pagination;
+
+type AllCinemasResponse = {
+  docs: Cinema[];
+} & Pagination;
+
+type SeasonsResponse = {
+  docs: Season[];
+} & Pagination;
+
+type AllCinemasArgs = {
+  page: number;
+  selectFields: string[];
+  limit: string;
+  filters: {
+    genre?: string;
+    country?: string;
+    year?: string;
+    ageRating?: string;
+  };
+};
+
+type ReviewsArgs = {
+  page: number;
+  movieId: string;
+  limit: string;
+};
+
+type SeasonsArgs = {
+  movieId: string;
+};
 
 export const cinemasApi = createApi({
   baseQuery: fetchBaseQuery({
@@ -11,11 +51,11 @@ export const cinemasApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAllCinemas: builder.query({
+    getAllCinemas: builder.query<AllCinemasResponse, AllCinemasArgs>({
       query: (args) => {
         let params = new URLSearchParams();
         for (let arg of args.selectFields) params.append("selectFields", arg);
-        params.append("page", args.page);
+        params.append("page", args.page.toString());
         params.append("limit", args.limit);
         if (args.filters.genre)
           params.append("genres.name", args.filters.genre);
@@ -69,6 +109,29 @@ export const cinemasApi = createApi({
       },
       keepUnusedDataFor: 86400,
     }),
+    getReviews: builder.query<ReviewResponse, ReviewsArgs>({
+      query: (args) => {
+        let params = new URLSearchParams();
+        params.append("page", args.page.toString());
+        params.append("limit", args.limit);
+        params.append("movieId", args.movieId);
+        return {
+          url: `/v1.4/review`,
+          params,
+        };
+      },
+    }),
+    getSeasons: builder.query<SeasonsResponse, SeasonsArgs>({
+      query: (args) => {
+        let params = new URLSearchParams();
+        return {
+          url: `/v1.4/season`,
+          params: {
+            movieId: args.movieId,
+          },
+        };
+      },
+    }),
   }),
   reducerPath: "api",
 });
@@ -79,4 +142,6 @@ export const {
   useGetCinemaPostersByIdQuery,
   useGetGenresQuery,
   useGetCountriesQuery,
+  useGetReviewsQuery,
+  useGetSeasonsQuery,
 } = cinemasApi;

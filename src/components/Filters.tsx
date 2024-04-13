@@ -6,9 +6,10 @@ import { Search2Icon } from "@chakra-ui/icons";
 
 const ratings = [
   { label: "18+", value: "18" },
-  { label: "12+", value: "12-17" },
-  { label: "6+", value: "6-12" },
-  { label: "0+", value: "0-6" },
+  { label: "16+", value: "16-17" },
+  { label: "12+", value: "12-15" },
+  { label: "6+", value: "6-11" },
+  { label: "0+", value: "0-5" },
 ];
 
 type FiltersProps = UseFiltersResult & {
@@ -81,7 +82,7 @@ export default function Filters({
           colorScheme="orange"
           color="orange"
         >
-          <option value={undefined}>Возрастной рейтинг</option>
+          <option value={"0-18"}>Возрастной рейтинг</option>
           {ratings.map((rating) => (
             <option key={rating.value} value={rating.value}>
               {rating.label}

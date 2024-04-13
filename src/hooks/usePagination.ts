@@ -8,14 +8,14 @@ export type UsePaginationResult = {
   setLimit: (limit: string) => void;
 };
 
-export function usePagination(): UsePaginationResult {
+export function usePagination(prefix: string): UsePaginationResult {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page: number = parseInt(searchParams.get("page") || "1");
-  const limit: string = searchParams.get("limit") || "10";
+  const page: number = parseInt(searchParams.get(prefix + "page") || "1");
+  const limit: string = searchParams.get(prefix + "limit") || "10";
   const setPage = useCallback(
     (page: number) => {
       const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.set("page", page.toString());
+      newSearchParams.set(prefix + "page", page.toString());
       setSearchParams(newSearchParams);
     },
     [setSearchParams],
@@ -23,7 +23,7 @@ export function usePagination(): UsePaginationResult {
   const setLimit = useCallback(
     (limit: string) => {
       const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.set("limit", limit);
+      newSearchParams.set(prefix + "limit", limit);
       setSearchParams(newSearchParams);
     },
     [setSearchParams],

@@ -9,9 +9,10 @@ import { usePagination } from "../hooks/usePagination";
 import { useFilters } from "../hooks/useFilters";
 import Pagination from "../components/Pagination";
 import Filters from "../components/Filters";
+import SearchModal from "../components/SearchModal";
 
 export default function Home() {
-  const { page, limit, setPage, setLimit } = usePagination();
+  const { page, limit, setPage, setLimit } = usePagination("home");
   const { genre, country, year, ageRating, setAllFilters } = useFilters();
   const {
     data: cinemas,
@@ -22,7 +23,7 @@ export default function Home() {
     error,
   } = useGetAllCinemasQuery({
     page,
-    selectFields: ["id", "name", "logo", "rating", "poster"],
+    selectFields: ["id", "name", "rating", "poster"],
     limit,
     filters: {
       genre,
@@ -58,6 +59,7 @@ export default function Home() {
       {isError && JSON.stringify(error)}
       {isSuccess && (
         <Box display="flex" alignItems="center" flexDirection="column" gap={10}>
+          <SearchModal />
           {isSuccessGenres && isSuccessCountries && (
             <Filters
               setAllFilters={setAllFilters}

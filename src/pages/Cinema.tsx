@@ -12,6 +12,10 @@ import {
 import Posters from "../components/Posters";
 import ActorsList from "../components/ActorsList";
 import CinemaSlider from "../components/CinemaSlider";
+import ReviewList from "../components/ReviewsList";
+import SeasonsList from "../components/SeasonsList";
+
+const series = ["cartoon", "tv-series", "anime", "animated-series"];
 
 export default function Cinema() {
   const { id } = useParams();
@@ -21,9 +25,10 @@ export default function Cinema() {
     isError,
     isFetching,
     isSuccess,
-    error,
+    error: cinemaError,
   } = useGetCinemaByIdQuery(id!);
-  if (isLoading || isFetching || !cinema)
+
+  if (isLoading || isFetching || cinemaError || !cinema)
     return (
       <Spinner
         thickness="10px"
@@ -35,6 +40,7 @@ export default function Cinema() {
         h={100}
       />
     );
+
   return (
     <Box
       h="100%"
@@ -79,6 +85,19 @@ export default function Cinema() {
       </Heading>
       <ActorsList actors={cinema.persons} />
       <CinemaSlider cinemas={cinema.similarMovies} />
+      <Heading size="2xl" color="orange.500" pb={5} pt={100}>
+        Отзывы
+      </Heading>
+      <ReviewList id={id!} />
+
+      {series.includes(cinema.type) && (
+        <>
+          <Heading size="2xl" color="orange.500" pb={5}>
+            Сезоны и серии
+          </Heading>
+          <SeasonsList movieId={id!} />
+        </>
+      )}
     </Box>
   );
 }
