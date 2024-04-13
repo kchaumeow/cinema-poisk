@@ -85,9 +85,7 @@ export default function Cinema() {
       </Heading>
       <ActorsList actors={cinema.persons} />
       <CinemaSlider cinemas={cinema.similarMovies} />
-      <Heading size="2xl" color="orange.500" pb={5} pt={100}>
-        Отзывы
-      </Heading>
+
       <ReviewList id={id!} />
 
       {series.includes(cinema.type) && (

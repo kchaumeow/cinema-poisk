@@ -31,6 +31,12 @@ type AllCinemasArgs = {
   };
 };
 
+type CinemaByNameArgs = {
+  page: number;
+  limit: string;
+  query: string;
+};
+
 type ReviewsArgs = {
   page: number;
   movieId: string;
@@ -123,7 +129,6 @@ export const cinemasApi = createApi({
     }),
     getSeasons: builder.query<SeasonsResponse, SeasonsArgs>({
       query: (args) => {
-        let params = new URLSearchParams();
         return {
           url: `/v1.4/season`,
           params: {
@@ -132,7 +137,20 @@ export const cinemasApi = createApi({
         };
       },
     }),
+    getCinemaByName: builder.query<AllCinemasResponse, CinemaByNameArgs>({
+      query: (args) => {
+        let params = new URLSearchParams();
+        params.append("page", args.page.toString());
+        params.append("limit", args.limit);
+        params.append("query", args.query);
+        return {
+          url: `/v1.4/movie/search`,
+          params,
+        };
+      },
+    }),
   }),
+
   reducerPath: "api",
 });
 
@@ -144,4 +162,5 @@ export const {
   useGetCountriesQuery,
   useGetReviewsQuery,
   useGetSeasonsQuery,
+  useGetCinemaByNameQuery,
 } = cinemasApi;

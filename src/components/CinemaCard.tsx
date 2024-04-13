@@ -27,6 +27,7 @@ export default function CinemaCard({ cinema }: { cinema: Cinema }) {
             alt={cinema.name}
             borderRadius="lg"
             objectFit="contain"
+            color="orange.500"
           />
         </CardBody>
         <Divider borderColor={"orange"} />

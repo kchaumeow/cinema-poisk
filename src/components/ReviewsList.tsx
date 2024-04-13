@@ -27,26 +27,31 @@ export default function ReviewList({ id }: { id: string }) {
     );
   if (!reviews || !reviews.docs.length)
     return (
-      <Heading color="orange.500" mt={200}>
+      <Heading color="orange.500" m={200}>
         Нет отзывов
       </Heading>
     );
   return (
-    <Stack spacing={4}>
+    <>
+      <Heading size="2xl" color="orange.500" pb={5} pt={100}>
+        Отзывы
+      </Heading>
       <Stack spacing={4}>
-        {reviews.docs.map((review) => (
-          <Box key={review.id}>
-            <ReviewCard review={review} />
-          </Box>
-        ))}
+        <Stack spacing={4}>
+          {reviews.docs.map((review) => (
+            <Box key={review.id}>
+              <ReviewCard review={review} />
+            </Box>
+          ))}
+        </Stack>
+        <Pagination
+          page={+page}
+          maxPage={reviews.pages}
+          setPage={setPage}
+          limit={limit}
+          setLimit={setLimit}
+        />
       </Stack>
-      <Pagination
-        page={+page}
-        maxPage={reviews.pages}
-        setPage={setPage}
-        limit={limit}
-        setLimit={setLimit}
-      />
-    </Stack>
+    </>
   );
 }
