@@ -1,57 +1,94 @@
-# Getting Started with Create React App
+# Веб-сайт с фильмами Cinema Poisk
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+## Установка зависимостей
 
-In the project directory, you can run:
+---
 
-### `npm start`
+```bash
+npm i # dependencies
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Запуск dev
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+```bash
+TOKEN=YOUR_TOKEN npm run dev # надо заменить YOUR_TOKEN на ваш токен для апи
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more
-information.
+## Запуск prod
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+TOKEN=YOUR_TOKEN npm run start # надо заменить YOUR_TOKEN на ваш токен для апи
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Запустить тесты
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+```bash
+npm test  # запуск тестов
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Docker
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will
-remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right
-into your project so you have full control over them. All of the commands except `eject` will still work, but they will
-point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+docker build --build-arg TOKEN=YOUR_TOKEN -t your_tag . # заменить YOUR_TOKEN и по желанию your tag
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you
-shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t
-customize it when you are ready for it.
+```bash
+docker run -it -p 7070:80 --rm your_tag # your_tag должен совпадать с тем, что сверху
+```
 
-### `docker build --build-arg TOKEN=WF76VQQ-HQB4P5G-JFJH8DF-CRKDP1M -t your_tag .`
+# Реализовано
 
-### `docker run -it -p 7070:80 --rm your_tag`
+---
 
-## Learn More
+1. **Список всех фильмов**
+    - Отображение списка фильмов и сериалов
+    - Реализация пагинации
+    - Возможность выбора количества фильмов для отображения на странице (по умолчанию 10)
+    - Фильтрация выдачи (по году, стране и возрастному рейтингу)
+    - Поиск по названию фильма
+    - Переход на страницу фильма из выдачи
+    - *Дополнительно:*
+        - Обмен результатами выдачи с другими пользователями через копирование ссылки
+        - Сохранение истории поиска (последние 20 запросов)
+        - Suggest с предложениями из ранее введенных значений при вводе нового названия
+        - Фильтрация подсказок по вхождению
+        - Поиск с задержкой в 1 секунду после последнего введенного символа (debounce)
 
-You can learn more in
-the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. **Страница отдельного фильма**
+    - Отображение информации о фильме или сериале:
+        - Название фильма/сериала
+        - Описание
+        - Рейтинг
+        - Список актеров (с пагинацией, если их больше 10)
+        - Список сезонов и серий (с пагинацией, если они подразумеваются)
+        - Отзывы пользователей (с пагинацией)
+        - Постеры в виде «карусели»
+    - Вывод списка похожих фильмов в виде «карусели»
+    - Отображение заглушки в случае отсутствия информации (например, «нет информации о ...»)
+    - Кнопка «назад», которая ведет на выдачу с сохранением фильтров и номера страницы
+    - *Дополнительно:*
+        - Реализация авторизации
+        - Страница с поиском рандомного фильма с фильтрами и кнопкой «Случайный фильм»
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+# Стек
+
++ React
++ TS
++ Vitest
++ React Router v6
++ Chakra UI + Choc UI
++ use-debounce
++ Webpack 5
++ RTK + RTK Query
