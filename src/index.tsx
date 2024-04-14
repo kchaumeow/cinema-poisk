@@ -11,7 +11,8 @@ import {
   type ThemeConfig,
 } from "@chakra-ui/react";
 import { Provider } from "react-redux";
-import { store } from "./features/store";
+import { persistor, store } from "./features/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -26,7 +27,9 @@ const theme = extendTheme({ config });
 root.render(
   <ChakraProvider theme={theme}>
     <Provider store={store}>
-      <RouterProvider router={router}></RouterProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router}></RouterProvider>
+      </PersistGate>
     </Provider>
   </ChakraProvider>,
 );

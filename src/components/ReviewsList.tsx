@@ -4,6 +4,7 @@ import { usePagination } from "../hooks/usePagination";
 import Pagination from "./Pagination";
 import { useLazyGetReviewsQuery } from "../features/api/cinemasSlice";
 import { useEffect } from "react";
+import Error from "./Error";
 
 export default function ReviewList({ id }: { id: string }) {
   const { page, limit, setPage, setLimit } = usePagination("reviews");
@@ -23,6 +24,8 @@ export default function ReviewList({ id }: { id: string }) {
     const request = trigger({ movieId: id, page, limit });
     return () => request.abort();
   }, []);
+
+  if (reviewsError) return <Error error={error} />;
 
   if (reviewsLoading || reviewsFetching)
     return (

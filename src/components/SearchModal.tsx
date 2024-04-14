@@ -138,8 +138,8 @@ export default function SearchModal() {
             </Box>
           </ModalBody>
           <ModalFooter>
-            <Button mr={3} onClick={onClose} colorScheme="orange">
-              Close
+            <Button mr={3} onClick={onClose} colorScheme="red">
+              Закрыть
             </Button>
           </ModalFooter>
         </ModalContent>

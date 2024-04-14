@@ -15,6 +15,7 @@ const ratings = [
 type FiltersProps = UseFiltersResult & {
   genres: Field[];
   countries: Field[];
+  onClickSearch?: () => void;
 };
 export default function Filters({
   genre,
@@ -24,6 +25,7 @@ export default function Filters({
   genres,
   countries,
   setAllFilters,
+  onClickSearch,
 }: FiltersProps) {
   const [filters, setFilters] = useState({ genre, country, year, ageRating });
   return (
@@ -34,12 +36,12 @@ export default function Filters({
           size="lg"
           px={4}
           colorScheme="red"
-          variant="outline"
+          variant="solid"
           onClick={() => {
             setAllFilters({});
           }}
         >
-          Стереть
+          Сбросить
         </Button>
         <Select
           w="300px"
@@ -50,7 +52,7 @@ export default function Filters({
           colorScheme="orange"
           color="orange"
         >
-          <option value={undefined}>Жанр</option>
+          <option value="">Жанр</option>
           {genres.map((genre) => (
             <option key={genre.name} value={genre.name}>
               {genre.name}
@@ -66,7 +68,7 @@ export default function Filters({
           colorScheme="orange"
           color="orange"
         >
-          <option value={undefined}>Страна</option>
+          <option value="">Страна</option>
           {countries.map((country) => (
             <option key={country.name} value={country.name}>
               {country.name}
@@ -95,17 +97,17 @@ export default function Filters({
           colorScheme="orange"
           type="text"
           value={filters.year}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, year: e.target.value }))
-          }
+          onChange={(e) => {
+            setFilters((prev) => ({ ...prev, year: e.target.value }));
+          }}
         />
         <Button
           colorScheme="orange"
           variant="solid"
           size="md"
           onClick={() => {
-            console.log(filters);
             setAllFilters(filters);
+            onClickSearch?.();
           }}
         >
           <Search2Icon />

@@ -2,6 +2,7 @@ import { Heading, Spinner } from "@chakra-ui/react";
 import { useLazyGetSeasonsQuery } from "../features/api/cinemasSlice";
 import Seasons from "./Seasons";
 import { useEffect } from "react";
+import Error from "./Error";
 
 export default function SeasonsList({ movieId }: { movieId: string }) {
   const [
@@ -12,7 +13,7 @@ export default function SeasonsList({ movieId }: { movieId: string }) {
       isError,
       isFetching,
       isSuccess,
-      error: cinemaError,
+      error: seasonsError,
     },
     lastPromiseInfo,
   ] = useLazyGetSeasonsQuery();
@@ -21,7 +22,9 @@ export default function SeasonsList({ movieId }: { movieId: string }) {
     return () => request.abort();
   }, []);
 
-  if (isLoading || !seasons)
+  if (isError) return <Error error={seasonsError} />;
+
+  if (isLoading || !seasons || isFetching)
     return (
       <Spinner
         thickness="10px"

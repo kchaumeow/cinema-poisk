@@ -23,12 +23,7 @@ type AllCinemasArgs = {
   page: number;
   selectFields: string[];
   limit: string;
-  filters: {
-    genre?: string;
-    country?: string;
-    year?: string;
-    ageRating?: string;
-  };
+  filters: RandomArgs;
 };
 
 type CinemaByNameArgs = {
@@ -45,6 +40,13 @@ type ReviewsArgs = {
 
 type SeasonsArgs = {
   movieId: string;
+};
+
+type RandomArgs = {
+  genre?: string;
+  country?: string;
+  year?: string;
+  ageRating?: string;
 };
 
 export const cinemasApi = createApi({
@@ -149,6 +151,19 @@ export const cinemasApi = createApi({
         };
       },
     }),
+    getRandomCinema: builder.query<Cinema, RandomArgs>({
+      query: (args) => {
+        let params = new URLSearchParams();
+        if (args.genre) params.append("genres.name", args.genre);
+        if (args.country) params.append("countries.name", args.country);
+        if (args.year) params.append("year", args.year);
+        if (args.ageRating) params.append("ageRating", args.ageRating);
+        return {
+          url: `/v1.4/movie/random`,
+          params,
+        };
+      },
+    }),
   }),
 
   reducerPath: "api",
@@ -163,4 +178,5 @@ export const {
   useLazyGetReviewsQuery,
   useLazyGetSeasonsQuery,
   useLazyGetCinemaByNameQuery,
+  useLazyGetRandomCinemaQuery,
 } = cinemasApi;

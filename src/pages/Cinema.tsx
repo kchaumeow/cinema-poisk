@@ -15,6 +15,7 @@ import ReviewList from "../components/ReviewsList";
 import SeasonsList from "../components/SeasonsList";
 import { useLazyGetCinemaByIdQuery } from "../features/api/cinemasSlice";
 import { useEffect } from "react";
+import Error from "../components/Error";
 
 const series = ["cartoon", "tv-series", "anime", "animated-series"];
 
@@ -36,6 +37,8 @@ export default function Cinema() {
     const request = trigger(id!);
     return () => request.abort();
   }, []);
+
+  if (isError) return <Error error={cinemaError} />;
 
   if (isLoading || isFetching || cinemaError || !cinema)
     return (
