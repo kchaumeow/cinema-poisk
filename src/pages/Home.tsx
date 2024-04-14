@@ -7,13 +7,14 @@ import Filters from "../components/Filters";
 import SearchModal from "../components/SearchModal";
 import { useGenresAndCountries } from "../hooks/useGenresAndCountries";
 import { useLazyGetAllCinemasQuery } from "../features/api/cinemasSlice";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Error from "../components/Error";
+import { QueryActionCreatorResult } from "@reduxjs/toolkit/query";
 
 export default function Home() {
   const { page, limit, setPage, setLimit } = usePagination("home");
   const { genre, country, year, ageRating, setAllFilters } = useFilters();
-
+  const currReq = useRef<QueryActionCreatorResult<any> | null>(null);
   const [
     trigger,
     {
@@ -26,7 +27,7 @@ export default function Home() {
     },
     lastPromiseInfo,
   ] = useLazyGetAllCinemasQuery();
-  useEffect(() => {
+  const searchRandomCinema = () => {
     const request = trigger({
       page,
       selectFields: ["id", "name", "rating", "poster"],
@@ -38,9 +39,12 @@ export default function Home() {
         ageRating,
       },
     });
-    return () => request.abort();
-  }, [genre, country, year, ageRating, page, limit]);
-
+    currReq.current = request;
+  };
+  useEffect(() => {
+    searchRandomCinema();
+    return () => currReq.current?.abort();
+  }, []);
   const { resultGenres, resultCountries } = useGenresAndCountries();
   if (isError) return <Error error={cinemaError} />;
   if (
@@ -69,10 +73,7 @@ export default function Home() {
           setAllFilters={setAllFilters}
           genres={resultGenres.data}
           countries={resultCountries.data}
-          genre={genre}
-          country={country}
-          year={year}
-          ageRating={ageRating}
+          onClickSearch={searchRandomCinema}
         />
       )}
       <CinemaList cinemas={cinemas.docs} />

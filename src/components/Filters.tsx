@@ -1,7 +1,6 @@
 import { Box, Button, Flex, Heading, Input, Select } from "@chakra-ui/react";
-import { UseFiltersResult } from "../hooks/useFilters";
+import { useFilters, UseFiltersResult } from "../hooks/useFilters";
 import { Field } from "../types";
-import { useState } from "react";
 import { Search2Icon } from "@chakra-ui/icons";
 
 const ratings = [
@@ -15,19 +14,14 @@ const ratings = [
 type FiltersProps = UseFiltersResult & {
   genres: Field[];
   countries: Field[];
-  onClickSearch?: () => void;
+  onClickSearch: () => void;
 };
 export default function Filters({
-  genre,
-  country,
-  year,
-  ageRating,
   genres,
   countries,
-  setAllFilters,
   onClickSearch,
 }: FiltersProps) {
-  const [filters, setFilters] = useState({ genre, country, year, ageRating });
+  const { genre, country, year, ageRating, setAllFilters } = useFilters();
   return (
     <Box display="flex" flexDirection="column" gap={5}>
       <Heading color="white">Фильтры</Heading>
@@ -45,9 +39,9 @@ export default function Filters({
         </Button>
         <Select
           w="300px"
-          value={filters.genre || genre}
+          value={genre}
           onChange={(e) =>
-            setFilters((prev) => ({ ...prev, genre: e.target.value }))
+            setAllFilters({ country, genre: e.target.value, year, ageRating })
           }
           colorScheme="orange"
           color="orange"
@@ -61,9 +55,9 @@ export default function Filters({
         </Select>
         <Select
           w="300px"
-          value={filters.country || country}
+          value={country}
           onChange={(e) =>
-            setFilters((prev) => ({ ...prev, country: e.target.value }))
+            setAllFilters({ country: e.target.value, genre, year, ageRating })
           }
           colorScheme="orange"
           color="orange"
@@ -77,9 +71,9 @@ export default function Filters({
         </Select>
         <Select
           w="300px"
-          value={filters.ageRating || ageRating}
+          value={ageRating}
           onChange={(e) =>
-            setFilters((prev) => ({ ...prev, ageRating: e.target.value }))
+            setAllFilters({ country, genre, year, ageRating: e.target.value })
           }
           colorScheme="orange"
           color="orange"
@@ -96,9 +90,9 @@ export default function Filters({
           placeholder="Год выхода"
           colorScheme="orange"
           type="text"
-          value={filters.year}
+          value={year}
           onChange={(e) => {
-            setFilters((prev) => ({ ...prev, year: e.target.value }));
+            setAllFilters({ country, genre, year: e.target.value, ageRating });
           }}
         />
         <Button
@@ -106,8 +100,7 @@ export default function Filters({
           variant="solid"
           size="md"
           onClick={() => {
-            setAllFilters(filters);
-            onClickSearch?.();
+            onClickSearch();
           }}
         >
           <Search2Icon />
