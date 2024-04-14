@@ -1,42 +1,30 @@
 # Веб-сайт с фильмами Cinema Poisk
 
----
-
 ## Установка зависимостей
-
----
 
 ```bash
 npm i # dependencies
 ```
 
-## Запуск dev
-
----
+### Запуск dev
 
 ```bash
 TOKEN=YOUR_TOKEN npm run dev # надо заменить YOUR_TOKEN на ваш токен для апи
 ```
 
-## Запуск prod
-
----
+### Запуск prod
 
 ```bash
 TOKEN=YOUR_TOKEN npm run start # надо заменить YOUR_TOKEN на ваш токен для апи
 ```
 
-## Запустить тесты
-
----
+### Запустить тесты
 
 ```bash
 npm test  # запуск тестов
 ```
 
-## Docker
-
----
+### Docker
 
 ```bash
 docker build --build-arg TOKEN=YOUR_TOKEN -t your_tag . # заменить YOUR_TOKEN и по желанию your tag
@@ -46,9 +34,7 @@ docker build --build-arg TOKEN=YOUR_TOKEN -t your_tag . # заменить YOUR_
 docker run -it -p 7070:80 --rm your_tag # your_tag должен совпадать с тем, что сверху
 ```
 
-# Реализовано
-
----
+## Реализовано
 
 1. **Список всех фильмов**
     - Отображение списка фильмов и сериалов
@@ -80,9 +66,7 @@ docker run -it -p 7070:80 --rm your_tag # your_tag должен совпадат
         - Реализация авторизации
         - Страница с поиском рандомного фильма с фильтрами и кнопкой «Случайный фильм»
 
----
-
-# Стек
+## Стек
 
 + React
 + TS
