@@ -13,31 +13,19 @@ import { QueryActionCreatorResult } from "@reduxjs/toolkit/query";
 
 export default function Home() {
   const { page, limit, setPage, setLimit } = usePagination("home");
-  const { genre, country, year, ageRating, setAllFilters } = useFilters();
+  const { filters } = useFilters();
   const currReq = useRef<QueryActionCreatorResult<any> | null>(null);
   const [
     trigger,
-    {
-      data: cinemas,
-      isLoading,
-      isError,
-      isFetching,
-      isSuccess,
-      error: cinemaError,
-    },
-    lastPromiseInfo,
+    { data: cinemas, isLoading, isError, isFetching, error: cinemaError },
   ] = useLazyGetAllCinemasQuery();
+
   const searchRandomCinema = () => {
     const request = trigger({
       page,
       selectFields: ["id", "name", "rating", "poster"],
       limit,
-      filters: {
-        genre,
-        country,
-        year,
-        ageRating,
-      },
+      filters,
     });
     currReq.current = request;
   };
@@ -70,7 +58,6 @@ export default function Home() {
       <SearchModal />
       {resultGenres.isSuccess && resultCountries.isSuccess && (
         <Filters
-          setAllFilters={setAllFilters}
           genres={resultGenres.data}
           countries={resultCountries.data}
           onClickSearch={searchRandomCinema}

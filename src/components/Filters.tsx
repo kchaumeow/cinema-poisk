@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Heading, Input, Select } from "@chakra-ui/react";
-import { useFilters, UseFiltersResult } from "../hooks/useFilters";
+import { useFilters } from "../hooks/useFilters";
 import { Field } from "../types";
 import { Search2Icon } from "@chakra-ui/icons";
 
@@ -11,7 +11,7 @@ const ratings = [
   { label: "0+", value: "0-5" },
 ];
 
-type FiltersProps = UseFiltersResult & {
+type FiltersProps = {
   genres: Field[];
   countries: Field[];
   onClickSearch: () => void;
@@ -21,7 +21,9 @@ export default function Filters({
   countries,
   onClickSearch,
 }: FiltersProps) {
-  const { genre, country, year, ageRating, setAllFilters } = useFilters();
+  const { filters, setAllFilters, resetFilters } = useFilters();
+  const { genre, country, year, ageRating } = filters;
+
   return (
     <Box display="flex" flexDirection="column" gap={5}>
       <Heading color="white">Фильтры</Heading>
@@ -31,9 +33,7 @@ export default function Filters({
           px={4}
           colorScheme="red"
           variant="solid"
-          onClick={() => {
-            setAllFilters({});
-          }}
+          onClick={resetFilters}
         >
           Сбросить
         </Button>

@@ -9,34 +9,24 @@ import CinemaCard from "../components/CinemaCard";
 import { QueryActionCreatorResult } from "@reduxjs/toolkit/query";
 
 export default function Random() {
-  const { genre, country, year, ageRating, setAllFilters } = useFilters();
+  const { filters } = useFilters();
   const currReq = useRef<QueryActionCreatorResult<any> | null>(null);
   const { resultGenres, resultCountries } = useGenresAndCountries();
   const [
     trigger,
-    {
-      data: cinema,
-      isLoading,
-      isError,
-      isFetching,
-      isSuccess,
-      error: cinemaError,
-    },
-    lastPromiseInfo,
+    { data: cinema, isLoading, isError, isFetching, error: cinemaError },
   ] = useLazyGetRandomCinemaQuery();
+
   const searchRandomCinema = () => {
-    const request = trigger({
-      genre,
-      country,
-      year,
-      ageRating,
-    });
+    const request = trigger(filters);
     currReq.current = request;
   };
+
   useEffect(() => {
     searchRandomCinema();
     return () => currReq.current?.abort();
   }, []);
+
   if (isError) return <Error error={cinemaError} />;
   if (
     resultGenres.isLoading ||
@@ -67,13 +57,8 @@ export default function Random() {
       <Heading color="orange.500">Случайный фильм</Heading>
       {resultGenres.isSuccess && resultCountries.isSuccess && (
         <Filters
-          setAllFilters={setAllFilters}
           genres={resultGenres.data}
           countries={resultCountries.data}
-          genre={genre}
-          country={country}
-          year={year}
-          ageRating={ageRating}
           onClickSearch={searchRandomCinema}
         />
       )}

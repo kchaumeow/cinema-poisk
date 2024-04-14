@@ -26,16 +26,16 @@ export default function CinemaSlider({ cinemas }: { cinemas: SimilarMovie[] }) {
       <Splide
         aria-label="My Favorite Images"
         options={{
-          perPage: 4,
+          perPage: 1,
           rewind: true,
-          width: 1500,
+          width: 400,
           gap: "3rem",
         }}
       >
         {cinemas.map((cinema) => (
           <SplideSlide key={cinema.id}>
             <Link to={`/cinemas/${cinema.id}`}>
-              <Card bg="#141414" maxW="sm" h={600}>
+              <Card bg="#141414" maxW="sm" h={700}>
                 <CardBody>
                   <Image
                     src={cinema.poster.url}

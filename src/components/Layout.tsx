@@ -53,7 +53,6 @@ export default function Layout() {
                 dispatch(setUser(null));
               }}
               colorScheme="orange"
-              color="black"
               size="lg"
             >
               Выход

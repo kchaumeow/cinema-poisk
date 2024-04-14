@@ -20,7 +20,7 @@ export default function ActorsList({ actors }: { actors: Person[] }) {
 
   return (
     <Box>
-      <Flex gap={4} p={5}>
+      <Flex gap={4} p={5} flexWrap="wrap" justifyContent="center">
         {actors.slice((currButton - 1) * 5, currButton * 5).map((actor) => {
           return <ActorCard key={actor.id} actor={actor} />;
         })}

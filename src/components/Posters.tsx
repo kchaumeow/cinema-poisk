@@ -55,9 +55,9 @@ export default function Posters({ id }: { id: string }) {
     <Splide
       aria-label="My Favorite Images"
       options={{
+        perPage: 1,
         rewind: true,
-        width: 800,
-        gap: "1rem",
+        width: 500,
       }}
     >
       {posters.docs.map((poster: CinemaPoster) => (

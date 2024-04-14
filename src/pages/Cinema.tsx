@@ -61,9 +61,9 @@ export default function Cinema() {
       alignItems="center"
       flexDirection="column"
     >
-      <Flex px={20} py={10}>
+      <Flex px={20} py={10} flexDirection={{ md: "column-reverse", lg: "row" }}>
         <Stack spacing={5}>
-          {cinema.logo ? (
+          {cinema.logo && cinema.logo.url ? (
             <Image
               fontSize="3xl"
               color="white"
@@ -74,9 +74,9 @@ export default function Cinema() {
               objectFit="contain"
             />
           ) : (
-            <Text color="white" fontSize="2xl" fontWeight="bold">
+            <Heading color="white" fontWeight="bold">
               {cinema.name}
-            </Text>
+            </Heading>
           )}
           <Text color="orange.500" fontWeight="700" fontSize="xl">
             KP: {cinema.rating.kp.toFixed(1)}
@@ -85,7 +85,9 @@ export default function Cinema() {
             {cinema.description}
           </Text>
         </Stack>
-        <Image src={cinema.poster.url} alt={cinema.name} h="800px" />
+        <Box h={{ xs: "200px", sm: "300px", md: "400px", lg: "800px" }}>
+          <Image src={cinema.poster.url} alt={cinema.name} />
+        </Box>
       </Flex>
 
       <Heading size="2xl" color="orange.500" pb={5}>

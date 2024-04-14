@@ -7,6 +7,7 @@ export default function ReviewCard({ review }: { review: Review }) {
       borderColor={colors.get(review.type) + ".300"}
       borderWidth={1}
       bg="#141414"
+      w={{ xs: "200px", sm: "300px", md: "400px", lg: "600px" }}
     >
       <CardHeader display="flex" justifyContent="space-between">
         <Text fontSize="xl" fontWeight="bold" color="white">

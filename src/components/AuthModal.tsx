@@ -29,7 +29,7 @@ export default function () {
   const dispatch = useDispatch();
   return (
     <>
-      <Button onClick={onOpen} colorScheme="orange" color="black" size="lg">
+      <Button onClick={onOpen} colorScheme="orange" size="lg">
         Войти
       </Button>
 

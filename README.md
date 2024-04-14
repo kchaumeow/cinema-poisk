@@ -3,19 +3,23 @@
 ## Установка зависимостей
 
 ```bash
-npm i # dependencies
+npm i 
+# Установка зависимостей
 ```
 
 ### Запуск dev
 
 ```bash
-TOKEN=YOUR_TOKEN npm run dev # надо заменить YOUR_TOKEN на ваш токен для апи
+TOKEN=YOUR_TOKEN npm run dev 
+# Надо заменить YOUR_TOKEN на ваш токен для апи
+# Для windows испльзуется cross-env 
 ```
 
 ### Запуск prod
 
 ```bash
-TOKEN=YOUR_TOKEN npm run start # надо заменить YOUR_TOKEN на ваш токен для апи
+TOKEN=YOUR_TOKEN npm run start 
+# Надо заменить YOUR_TOKEN на ваш токен для апи
 ```
 
 ### Запустить тесты
@@ -27,11 +31,13 @@ npm test  # запуск тестов
 ### Docker
 
 ```bash
-docker build --build-arg TOKEN=YOUR_TOKEN -t your_tag . # заменить YOUR_TOKEN и по желанию your tag
+docker build --build-arg TOKEN=YOUR_TOKEN -t your_tag . 
+# Надо заменить YOUR_TOKEN и по желанию your_tag
 ```
 
 ```bash
-docker run -it -p 7070:80 --rm your_tag # your_tag должен совпадать с тем, что сверху
+docker run -it -p 7070:80 --rm your_tag
+# your_tag должен совпадать с тем, что сверху
 ```
 
 ## Реализовано

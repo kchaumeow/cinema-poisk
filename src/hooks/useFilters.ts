@@ -1,49 +1,50 @@
 import { useSearchParams } from "react-router-dom";
 import { useCallback } from "react";
 
-type Filters = {
-  genre?: string;
-  country?: string;
-  year?: string;
-  ageRating?: string;
-};
+const filterOptions = ["genre", "country", "year", "ageRating"] as const;
+type FilterOption = (typeof filterOptions)[number];
+type Filters = Record<FilterOption, string>;
 
 export type UseFiltersResult = {
-  genre?: string;
-  country?: string;
-  year?: string;
-  ageRating?: string;
-  setAllFilters: (filters: Filters) => void;
+  filters: Filters;
+  setAllFilters: (newFilters: Filters) => void;
+  resetFilters: () => void;
 };
 
 export function useFilters(): UseFiltersResult {
   const [searchParams, setSearchParams] = useSearchParams();
-  const genre: string | undefined = searchParams.get("genre") || undefined;
-  const country: string | undefined = searchParams.get("country") || undefined;
-  const year: string | undefined = searchParams.get("year") || undefined;
-  const ageRating: string | undefined =
-    searchParams.get("ageRating") || undefined;
+  const genre = searchParams.get("genre") || "";
+  const country = searchParams.get("country") || "";
+  const year = searchParams.get("year") || "";
+  const ageRating = searchParams.get("ageRating") || "";
 
   const setAllFilters = useCallback(
-    (filters: Filters) => {
+    (newFilters: Filters) => {
       const newSearchParams = new URLSearchParams(searchParams);
-      !filters.genre
-        ? newSearchParams.delete("genre")
-        : newSearchParams.set("genre", filters.genre);
-      !filters.country
-        ? newSearchParams.delete("country")
-        : newSearchParams.set("country", filters.country);
-      !filters.year
-        ? newSearchParams.delete("year")
-        : newSearchParams.set("year", filters.year);
-      !filters.ageRating
-        ? newSearchParams.delete("ageRating")
-        : newSearchParams.set("ageRating", filters.ageRating);
+
+      for (const key of filterOptions) {
+        const value = newFilters[key];
+        if (value) newSearchParams.set(key, value);
+        else newSearchParams.delete(key);
+      }
 
       setSearchParams(newSearchParams);
     },
     [setSearchParams],
   );
 
-  return { genre, country, year, ageRating, setAllFilters };
+  const resetFilters = useCallback(() => {
+    setAllFilters({
+      genre: "",
+      country: "",
+      year: "",
+      ageRating: "",
+    });
+  }, []);
+
+  return {
+    filters: { genre, country, year, ageRating },
+    setAllFilters,
+    resetFilters,
+  };
 }
